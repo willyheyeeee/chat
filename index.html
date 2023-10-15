@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>willyheyeeee's html practice</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+    <div id="chatbox"></div>
+    <input id="input" type="text" placeholder="輸入後按下Enter"></input>
+    <script>
+        var socket = io();
+
+        var name = prompt('請輸入用戶名 : ',"your name ");
+        var text = '加入聊天室';
+        var time = new Date();
+        time = time.toLocaleTimeString();
+        var r = Math.random() * 255;
+        var g = Math.random() * 255;
+        var b = Math.random() * 255;
+        var color = `rgb(${r}, ${g}, ${b})`;
+
+        socket.emit('myMessage', [text, name, time, color]);
+        
+        $('#input').keypress((event) => {
+            var text = $('#input').val();
+            var time = new Date();
+            time = time.toLocaleTimeString();
+            if(event.keyCode === 13 && text !== ''){
+                $('#input').val('');
+                socket.emit('myMessage', [text, name, time, color]);
+            }
+        });
+        
+        const appendComment = (text, name, time, color) => {
+            var html = `<p style="color: ${color};">【${name} ${time}】 ${text}</p>`;
+            $('#chatbox').append(html); 
+            var height = $('#chatbox').prop('scrollHeight');
+            $('#chatbox').scrollTop(height);
+        }
+        
+        socket.on('allMessage' , (data) => {
+            appendComment(data[0], data[1], data[2], data[3]);
+        });
+        
+    </script>
+</body>
+</html>
