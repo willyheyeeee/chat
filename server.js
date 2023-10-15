@@ -13,7 +13,9 @@ app.get('/', (req,res) =>{
   res.sendFile(__dirname + '/index.html');
 })
 app.use('/css', express.static('css'));
-server.listen(port, "172.20.10.2")
+server.listen(port, () =>{
+  console.log(`Example app listening at 172.20.10.2:${port}`)
+})
 let onlineCount = 0;
 io.on('connection', (socket) => {
   onlineCount++;
