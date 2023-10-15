@@ -13,7 +13,7 @@ app.get('/', (req,res) =>{
   res.sendFile(__dirname + '/index.html');
 })
 app.use('/css', express.static('css'));
-server.listen(port)
+server.listen(port,'0.0.0.0')
 let onlineCount = 0;
 io.on('connection', (socket) => {
   onlineCount++;
